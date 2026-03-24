@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
 import axios from 'axios'
+import { useParams } from "react-router-dom";
 
 const Product = () => {
 
       const [details, setDetails] = useState({})
+       const params= useParams();
+       console.log(params.id);
       useEffect(()=> {
         const FetchData = async() =>{
           try {
-              let response = await axios.get("https://dummyjson.com/products/1")
+              let response = await axios.get(`https://dummyjson.com/products/${params.id}`)
               console.log(response.data)
               setDetails(response.data)
           } catch (error) {
@@ -15,14 +18,14 @@ const Product = () => {
           }
         }
         FetchData();
-      },[])
+      },[params.id])
   return (
     <>
       <section className="w-full h-screen flex items-center justify-center p-20">
         {/* image */}
         <div className="w-1/2 relative flex items-center justify-center">
           <img
-            src={details.images}
+            src={details.images?.[0]}
             alt="image"
           />
 
@@ -35,7 +38,7 @@ const Product = () => {
           <h2 className="text-2xl font-bold text-[#6f4519]/30 pb-6">
             {details.category}
           </h2>
-          <p className="text-6xl font-bold py-6">$ {details.price}</p>
+          <p className="text-6xl font-bold py-6">${details.price}</p>
           <p className="text-2xl py-8">
            {details.description}
           </p>
